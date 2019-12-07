@@ -1,16 +1,19 @@
 <img src="docs/logo.svg" style="max-width: 700px">
 
-**Mødernity a super simple, low barrier-to-entry JAMstack starter built on 11ty.**
+**Mødernity is a conventions-first, easy-to-understand web boilerplate built on [html-lit](https://lit-html.polymer-project.org/) and [11ty](https://www.11ty.io/).**
 
-It is well suited for collaborative, open-source web projects that want to make use of the benefits of the modern front-end development toolchain, yet be simple enough that anyone with limited HTML, JavaScript and CSS experience can contribute.
+It is well suited for [JAMstack](https://jamstack.org/)-inspired projects that want to draw on the benefits of the modern front-end tooling, yet be simple enough that anyone with basic HTML, JavaScript and CSS experience can work on projects built on Mødernity.
 
 **Table of Contents:**
 
 - [Quickstart](#quickstart)
+  - [Environment](#environment)
+  - [Commands](#commands)
+- [Goals](#goals)
 - [Tech-stack](#tech-stack)
   - [Core](#core)
+    - [11ty](#11ty)
     - [lit-html](#lit-html)
-    - [Material Design Components](#material-design-components)
   - [Testing / Linting](#testing--linting)
     - [Storybook](#storybook)
     - [Prettier](#prettier)
@@ -21,29 +24,57 @@ It is well suited for collaborative, open-source web projects that want to make 
 
 # Quickstart
 
-1. Make sure you have the latest version of [NodeJS](https://nodejs.org/en/) and [Git](https://git-scm.com/) installed.
+## Environment
+
+Make sure you have the latest versions of both [NodeJS](https://nodejs.org/en/) and [Git](https://git-scm.com/) installed. In addition, for real-time linting and syntax-higlighting make sure to add the following to your IDE:
+
+   - [Adding ESLint](https://eslint.org/docs/user-guide/integrations)
+   - [Adding Stylelint](https://stylelint.io/user-guide/complementary-tools#editor-plugins)
+   - [Adding lit-html syntax higlighting](https://lit-html.polymer-project.org/guide/tools#ide-plugins)
+
+## Commands
+
+Open either the [Unix Shell](https://en.wikipedia.org/wiki/Unix_shell) (OSX or Linux), [Powershell](https://en.wikipedia.org/wiki/PowerShell) (Windows) or your custom terminal complete the following:
+
+1. Navigate to the location where you want to place your project folder.
+
 2. Clone the repository via `git clone https://github.com/schalkventer/modernity.git`
-3. Make sure to integrate ESLint, Stylelint and Lit-HTML syntax highlighting for your IDE:
-   1. [Adding ESLint](https://eslint.org/docs/user-guide/integrations)
-   2. [Adding Stylelint](https://stylelint.io/user-guide/complementary-tools#editor-plugins)
-   3. [Adding lit-html syntax higlighting](https://lit-html.polymer-project.org/guide/tools#ide-plugins)
-4. Run `npm install`.
-5. Run the following as needed:
-   1. To build the website into the `dist` folder run `npm run build`.
-   2. To start a local development server at [http://localhost:8080/](http://localhost:8080/) run `npm start`.
-   3. To start the Storybook component-testing framework run `npm test`.
-   4. To check for and auto-fix formatting errors in your code run `npm run lint`.
-6. Refer to the documentation in the `README.md` file as needed.
+
+3. Install all dependencies via `npm install`.
+
+4. Execute `npm run config` to replace the default documentation and conventions with project-specific values.
+
+5. Run the following commands as needed:
+   1. To build the website into the `dist` folder run: `npm run build`.
+   2. To start a local development server at [http://localhost:8080/](http://localhost:8080/) run: `npm start`.
+   3. To start the Storybook component-testing framework run: `npm test`.
+   4. To check and auto-fix code against defined conventions run: `npm run lint`.
+
+# Goals
+
+**Mødernity is guided by three core principles:**
+
+1. ***Standarization***: Developers should be able to enforce project-defined conventions with no extra complexity.
+2. ***Accesibility***: Developers should require only limited HTML, CSS and JavaScript experience to use.
+3. ***Community:*** Should use open-sourced and well-documented third-party tooling (see [tech-stack](#tech-stack)).
+
+This means that Mødernity is a good fit for the following:
+
+- **Decentralized community-driven and open-source web projects.**
+- **Learning modern JAMstack development.**
+- **Improving your native HTML, CSS and JavaScript skills.**
 
 # Tech-stack
 
 ## Core
 
+### 11ty
+
 [11ty](https://www.11ty.dev/) conventions pending....
 
 ### lit-html
 
-**[lit-html](https://lit-html.polymer-project.org/) allows developers to write both client-side and static-html in regular JavaScript by using native JavaScript template tags.**
+**[lit-html](https://lit-html.polymer-project.org/) is tiny library that allows developers to write both client-side and static-html by using regular JavaScript syntax.**
 
 As an example you can create the following two components (called 'button' and 'layout').
 
@@ -101,15 +132,14 @@ export default () => html`
 `;
 ```
 
+You can see the above in action in the following Codepen example:
+
+[![](docs/codepen-example.png)](https://codepen.io/schalkventer/pen/BayoJPa)
+
 The initial static HTML that is sent to the user is generated with [lit-html-server](https://www.npmjs.com/package/@popeindustries/lit-html-server). Once the client-side JavaScript is loads the static-html is hydrated by using the core [lit-html](https://www.npmjs.com/package/lit-html) library `
 
 
 The core [lit-html](https://www.npmjs.com/package/lit-html) library is used to update all 
-
-### Material Design Components
-
-[Material Design Components](https://material.io/develop/web/) conventions pending....
-[]
 
 ## Testing / Linting
 

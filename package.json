@@ -1,0 +1,39 @@
+{
+  "name": "modernity",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "start:website": "eleventy --input=./src/pages --output=./dist",
+    "start:storybook": "start-storybook",
+    "build:website": "eleventy --input=./src/pages --output=./dist --serve",
+    "test": "stylelint **/*.scss --fix & eslint **/*.js --fix"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^0.9.0",
+    "@babel/core": "^7.7.5",
+    "@storybook/html": "^5.2.8",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-compat": "^3.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "husky": "^3.1.0",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "stylelint": "^12.0.0",
+    "stylelint-config-prettier": "^8.0.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-no-unsupported-browser-features": "^4.0.0",
+    "stylelint-prettier": "^1.1.1",
+    "stylelint-scss": "^3.13.0"
+  },
+  "dependencies": {
+    "html-template-tag": "^3.2.0",
+    "material-components-web": "^4.0.0"
+  }
+}

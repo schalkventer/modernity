@@ -1,6 +1,4 @@
-<img src="https://raw.githubusercontent.com/schalkventer/modernity/master/docs/logo.svg" style="max-width: 700px">
-
-![](docs/logo.svg)
+<img src="docs/logo.svg" style="max-width: 700px">
 
 **Mødernity a super simple, low barrier-to-entry JAMstack starter built on 11ty.**
 

@@ -1,0 +1,9 @@
+  
+{
+  "extends": ["stylelint-config-recommended"],
+  "plugins": [
+    "stylelint-scss",
+    "stylelint-prettier",
+    "stylelint-no-unsupported-browser-features"
+  ]
+}

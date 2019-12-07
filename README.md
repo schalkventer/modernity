@@ -8,10 +8,10 @@ It is well suited for collaborative, open-source web projects that want to make 
 
 - [Quickstart](#quickstart)
 - [Tech-stack](#tech-stack)
-  - [11ty](#11ty)
+  - [Core](#core)
     - [lit-html](#lit-html)
     - [Material Design Components](#material-design-components)
-    - [Testing / Linting](#testing--linting)
+  - [Testing / Linting](#testing--linting)
     - [Storybook](#storybook)
     - [Prettier](#prettier)
     - [Stylelint](#stylelint)
@@ -37,7 +37,7 @@ It is well suited for collaborative, open-source web projects that want to make 
 
 # Tech-stack
 
-## 11ty
+## Core
 
 [11ty](https://www.11ty.dev/) conventions pending....
 
@@ -111,7 +111,7 @@ The core [lit-html](https://www.npmjs.com/package/lit-html) library is used to u
 [Material Design Components](https://material.io/develop/web/) conventions pending....
 []
 
-### Testing / Linting
+## Testing / Linting
 
 ### Storybook
 

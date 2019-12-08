@@ -1,6 +1,4 @@
-<div style="max-width: 700px">
-  <img src="docs/logo.svg" style="width: 100%">
-</div>
+<img src="docs/logo.svg" width="700">
 
 **Mødernity is a web project starter-kit allowing contributors of all skill levels to contribute to your project.**
 
@@ -97,7 +95,7 @@ That's it! We should see the following if we run `yarn start` and navigate to `h
 ![](docs/basic-example.png)
 
 You can add additional pages by using the 11ty convention for generating pages. For example:
-
+git pu
 - `src/pages/index.11ty.js` creates `www.example.com`.
 - `src/pages/about/index.11ty.js` creates `www.example.com/about`.
 - `src/pages/product/potato-cat/index.11ty.js` creates `www.example.com/product/potato-cat`

@@ -1,17 +1,15 @@
 <img src="docs/logo.svg" width="700">
 
-**Mødernity is a web project starter-kit allowing contributors of all skill levels to contribute to your project.**
+**Mødernity is an 11ty-based starter built specifically for remote, open-source and volunteer-driven web projects.**
 
-It is specifically built to be used by remote volunteer-driven projects that require two things:
+It is a good fit for teams or individuals that require the following:
 
 - The benefits of a modern [JAMstack](https://jamstack.org/) website.
 - Contributions from developers across the entire skill spectrum.
 
-This is accomplished beginner-friendly tooling that automatically enforces project-specific conventions. The primary goal is to assist contributors when they are adding/testing new code, while making it effortless for you to maintain/merge their code with confidence.
+Mødernity is made up of beginner-friendly tooling that automatically enforce best practices and have ready-to-go documentation. The primary goal is to make it effortless for  contributors to write, read and test code. In addition, pre-configured linting and testing tools makes it easier for you to maintain/merge external changes with confidence.
 
-**Mødernity isn't a library or framework. It is a pre-configured bundle of modern beginner-friendly front-end tooling. This means that what you see is what you get. There are no Mødernity config files or Mødernity-specific abstractions.**
-
-The name Mødernity is a play on *11ty* (on which the project is built) and *modern*. As well as the [form follows function](https://en.wikipedia.org/wiki/Form_follows_function) mantra from the [modernity era](https://en.wikipedia.org/wiki/Modernity).
+**Mødernity isn't a library or framework. It is a pre-configured bundle of modern, yet beginner-friendly front-end tooling. This means that what you see is what you get. There are no Mødernity config files nor any Mødernity-specific abstractions in this codebase.**
 
 **Table of Contents:**
 
@@ -21,7 +19,12 @@ The name Mødernity is a play on *11ty* (on which the project is built) and *mod
 - [Getting started](#getting-started)
   - [Create your first page](#create-your-first-page)
   - [Creating a shared component](#creating-a-shared-component)
-- [Motivation](#motivation)
+  - [Making your component dynamic](#making-your-component-dynamic)
+  - [Nesting components](#nesting-components)
+  - [Updating pages in real-time](#updating-pages-in-real-time)
+  - [Auto-triggering page updates](#auto-triggering-page-updates)
+- [Managing contributions](#managing-contributions)
+- [Customizing Mødernity](#customizing-m%c3%b8dernity)
 - [Tech-stack](#tech-stack)
   - [Core](#core)
     - [11ty](#11ty)
@@ -54,7 +57,7 @@ The name Mødernity is a play on *11ty* (on which the project is built) and *mod
 
 3. Install all dependencies via `npm install`.
 
-4. Execute `npm run config` to replace the default documentation and conventions with project-specific values.
+4. Replace delete `README.md` and rename `README.md.prod`. to `README.md`
 
 5. Run the following commands as needed:
    1. To build the website into the `dist` folder run: `npm run build`.
@@ -66,9 +69,11 @@ The name Mødernity is a play on *11ty* (on which the project is built) and *mod
 
 ## Create your first page
 
-Mødernity is built on [11ty](https://www.11ty.io/) and uses [html-lit](https://lit-html.polymer-project.org/) for both client-side and static-html templating.
+Mødernity is built on [11ty](https://www.11ty.io/) and uses [lit-html](https://lit-html.polymer-project.org/) for both client-side and static-html templating.
 
-Since our instance of 11ty is set to build our pages from the `src/pages` directory ad use plain JavaScript for templating we can create our homepage file at `src/page/index.11ty.js`.
+*html-lit*, initially created by the Google-backed team working on [Polymer](https://polymer-project.org/), was chosen because it is very easy to learn, while still being extremely expressive. It is currently one of the few well-known templating langauge that relies exclusively on plain JavaScript without any abstractions.
+
+Since our instance of 11ty is set to build our pages from the `src/pages` directory and we can create a homepage file at `src/page/index.11ty.js`.
 
 In this file we can add the following:
 
@@ -76,8 +81,9 @@ In this file we can add the following:
 /* src/pages/index.11ty.js */
 
 import { html } from 'lit-html';
+import createPage from '../helpers/createPage';
 
-export default html`
+const page = html`
   <html>
   <head>
     <title>Our home page</title>
@@ -88,47 +94,49 @@ export default html`
      </body>
   </html>
 `;
+
+export default createPage(page);
 ```
 
 That's it! We should see the following if we run `yarn start` and navigate to `https://localhost:8080:`
 
 ![](docs/basic-example.png)
 
-You can add additional pages by using the 11ty convention for generating pages. For example:
-git pu
+You can add additional pages by using the same 11ty convention for generating pages. For example:
 - `src/pages/index.11ty.js` creates `www.example.com`.
 - `src/pages/about/index.11ty.js` creates `www.example.com/about`.
 - `src/pages/product/potato-cat/index.11ty.js` creates `www.example.com/product/potato-cat`
 
 ## Creating a shared component
 
-However, adding all the HTML boilerplate can become quite cumbersome. Let us wrap the boilerplate logic in a component called 'wrapper.js' (we only need to add `11ty.js` for page files).
+However, after you've added several pages you start to notice that it becomes quite cumbersome to add all the surrounding HTML tags everytime (especially as our site grows). 
 
-Components are plain JavaScript functions that return custom HTML based on the context and children passed to them.
+Luckily this can be solved by wrapping these tags in a shareable component. Let us create a component named 'wrapper.js' (note that we only need to add `11ty.js` for files that create website pages). You will notice that all a component is, is a run-of-the-mill JavaScript function that return HTML based on the context and children passed to it.
 
 ```js
 /* src/components/wrapper/index.js */
 
 import { html } from 'lit-html';
 
-export default (context, content) => html`
+export default (context, children) => html`
   <html>
     <head>
       <title>${context.title}</title>
     </head>
     <body>
-      ${content}
+      ${children}
     </body>
   </html>
 `;
 ```
 
-We can then change our homepage to the following:
+We can then change our homepage as follows:
 
 ```js
 /* src/pages/index.11ty.js */
 
 import { html } from 'lit-html';
+import createPage from '../helpers/createPage';
 import wrapper from '../components/wrapper';
 
 const content = html`
@@ -136,12 +144,17 @@ const content = html`
   <p>This is your very first Mødernity page.</p>
 `;
 
-export default html`
-  ${wrapper({ title: 'Homepage' })}
+const page = html`
+  ${wrapper({ title: 'Homepage' }, content)}
 `;
+
+export default createPage(page)
 ```
 
-We can even toggle a components styling by importing a CSS file and : 
+## Making your component dynamic
+
+We can even set a component's styling by importing a CSS file and using a helper function included in the Mødernity itself. Also notice the `@click=${}` *lit-html*-specific value below. 
+
 ```css
 /* src/components/button/styles.css */
 
@@ -167,56 +180,138 @@ We can even toggle a components styling by importing a CSS file and :
 /* src/components/button/index.js */
 
 import { html } from 'lit-html';
-import { calcStyling } from 'modernizr';
+import calcStyling from '../../helpers/calcStyling';
 import './styles.css';
 
+// `calcStyling` adds a CSS class name if it's condition is true.
 const cssClasses = calcStyling({
-  'button': null,
+  'button': true,
   'blue': context.primary === true,
 })
 
+// `<button>` will have the following classes: "button blue"
 export default (context, content) => html`
-  <button class="${cssFromContext(context)}>
+  <button 
+    class="${cssFromContext(context)}
+    @click=${context.handleClick}
+  >
     Click me!
   </button>
 `;
 ```
 
+## Nesting components
 
-
-
-
-
-
-We can even nest components inside one another. Let's add another component:
-
-
+Components can also be nested inside other components:
 
 ```js
 // src/pages/index.11ty.js
 
 import { html } from 'lit-html';
 import wrapper from '../components/wrapper';
-import customButton from '../components/customButton';
+import button from '../components/button';
+
+const handleClick = () => alert('Button was clicked!');
 
 const content = html`
   <h1>Hello world!</h1>
   <p>This is your very first Mødernity page.</p>
-  $
+  ${button({ primary: true, handleClick })}
 `;
 
 export default html`
-  ${wrapper({ title: 'Homepage' })}
+  ${wrapper({ title: 'Homepage' }, content)}
 `;
 ```
 
-# Motivation
+## Updating pages in real-time
+
+Now for the part where *lit-html* really shines! We can effortlessly change the template real-time on the client-side. This is where *lit-html* really shines over other beginner-friendly templating languages! We can use the included `updatePage` helper function to make real-time updates to a page as follows.
+
+*Note that dynamic values should only be stored in page level `.11ty.js` files and not in components.*
+
+```js
+// src/pages/index.11ty.js
+
+import { html, render } from 'lit-html';
+import updatePage from '../helpers/updatePage';
+import createPage from '../helpers/createPage';
+import wrapper from '../components/wrapper';
+import button from '../components/button';
+
+let primary = true;
+
+const handleClick = () => {
+  primary = !primary;
+  updatePage();
+}
+
+const content = html`
+  <h1>Hello world!</h1>
+  <p>This is your very first Mødernity page.</p>
+  ${button({ primary })}
+`;
+
+const page = html`
+  ${wrapper({ title: 'Homepage' }, content)}
+`;
+
+export default createPage(page);
+```
+
+## Auto-triggering page updates
+
+Lastly, if we want to update a value once the JavaScript loads we can do this following with the `checkIfPageLoaded` helper function. This is useful if you want to load data from a remote endpoint, the localStorage API or even if you want to add dynamic data (for example the current date) once the page is loaded.
+
+In the following example we are saving the state of the button in the localStorage browser API and only showing the button once we checked the localStorage value:
+
+```js
+// src/pages/index.11ty.js
+
+import { html, render } from 'lit-html';
+import updatePage from '../helpers/updatePage';
+import createPage from '../helpers/createPage';
+import checkIfPageLoaded from '../helpers/checkIfPageLoaded';
+import condition from '../helpers/condition';
+import wrapper from '../components/wrapper';
+import button from '../components/button';
+
+let primary = undefined;
+
+if (checkIfPageLoaded()) {
+  primary = localStorage.get('primary') === 'true';
+}
+
+const handleClick = () => {
+  localStorage.set('primary', !primary)
+  primary = !primary;
+  updatePage();
+}
+
+const content = html`
+  <h1>Hello world!</h1>
+  <p>This is your very first Mødernity page.</p>
+  ${primary !== undefined ? button({ primary }) : ''}
+`;
+
+const page = html`
+  ${wrapper({ title: 'Homepage' }, content)}
+`;
+
+export default createPage(page);
+```
+
+# Managing contributions
+
+...
+
+# Customizing Mødernity
 
 **Mødernity is guided by three core principles:**
 
-1. ***Standarization***: Developers should be able to automatically enforce project-defined conventions at all times.
+1. ***Readability***: Developers should be able to automatically enforce project-defined conventions at all times.
 2. ***Accesibility***: Developers should require only limited HTML, CSS and JavaScript experience to contribute.
-3. ***Transparent:*** Rely on open-source and well-documented third-party tooling instead of own abstractions.
+3. ***Transparency:*** Should use modern, well-documented third-party tooling instead of bespoke opaque abstractions.
 
 # Tech-stack
 
@@ -230,83 +325,7 @@ export default html`
 
 **[lit-html](https://lit-html.polymer-project.org/) is tiny library that allows developers to write both client-side and static-html by using regular JavaScript syntax.**
 
-As an example you can create the following two components (called 'button' and 'layout').
-
-```js
-// src/components/button.js
-
-import { html } from 'lit-html';
-import { update } from 'modernity';
-
-
-export default (context) => html`
-  <button @click=${handleClick}>
-    Hi ${context.name}, you've clicked the button ${amountClicked} times!
-  </button>
-`;
-```
-
-```js
-// src/components/layout.js
-
-import { html } from 'lit-html';
-
-export default (context, children) => html`
-  <html>
-    <head>
-      <title>${context.pageTitle}</title>
-      <link rel="stylesheet" href="styles.css" />
-      <script defer src="scripts.js"></scritps>
-    </head>
-    <body>
-      {children}
-    </body>
-  </html>
-`;
-```
-
-You can then create a static HTML page at `https://www.example.com/example-page` by composing regular HTML alongside the above components as follows:
-
-```js
-// src/pages/example-page.11ty.js
-
-import { html } from 'lit-html';
-import { layout } from '../components/layout';
-import { button } from '../components/button';
-
-const updatePage = () => {
-  document.querySelector('')
-}
-
-const buttonContext = {
-  clicked: 0,
-  clickHander: () => {
-     amountClicked++;
-     update()
-  }
-}
-
-const children = html`
-  <div id="example-page">
-     <h1>This is an example page</h1>
-     <p>Click the button to increase the click counter!</p>
-     ${button(buttonContext)}
-  </div>
-`;
-
-export default () => html`
-  ${layout({ pageTitle: 'Example Page' }, children)}
-`;
-```
-
-You can see the above in action in the following Codepen example:
-
 [![](docs/codepen-example.png)](https://codepen.io/schalkventer/pen/BayoJPa)
-
-The initial static HTML that is sent to the user is generated with [lit-html-server](https://www.npmjs.com/package/@popeindustries/lit-html-server). Once the client-side JavaScript is loads the static-html is hydrated by using the core [lit-html](https://www.npmjs.com/package/lit-html) library `
-
-
-The core [lit-html](https://www.npmjs.com/package/lit-html) library is used to update all 
 
 ## Testing / Linting
 
